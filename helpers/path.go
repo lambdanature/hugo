@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/user"
 	"path"
 	"path/filepath"
 	"regexp"
@@ -586,8 +587,12 @@ func GetCacheDir(fs afero.Fs, cfg config.Provider) (string, error) {
 		return cacheDir, nil
 	}
 
+	user, err := user.Current()
+	if err != nil {
+		return "", _errors.Wrap(err, "failed to retrieve current user")
+	}
 	// Fall back to a cache in /tmp.
-	return GetTempDir("hugo_cache", fs), nil
+	return GetTempDir("hugo_cache_"+user.Username, fs), nil
 }
 
 func getCacheDir(cfg config.Provider) string {
@@ -605,7 +610,7 @@ func getCacheDir(cfg config.Provider) string {
 		return "/opt/build/cache/hugo_cache/"
 	}
 
-	// This will fall back to an hugo_cache folder in the tmp dir, which should work fine for most CI
+	// This will fall back to an hugo_cache_$USER folder in the tmp dir, which should work fine for most CI
 	// providers. See this for a working CircleCI setup:
 	// https://github.com/bep/hugo-sass-test/blob/6c3960a8f4b90e8938228688bc49bdcdd6b2d99e/.circleci/config.yml
 	// If not, they can set the HUGO_CACHEDIR environment variable or cacheDir config key.

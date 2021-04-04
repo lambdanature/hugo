@@ -60,7 +60,7 @@ Flags:
   -D, --buildDrafts            include content marked as draft
   -E, --buildExpired           include expired content
   -F, --buildFuture            include content with publishdate in the future
-      --cacheDir string        filesystem path to cache directory. Defaults: $TMPDIR/hugo_cache/
+      --cacheDir string        filesystem path to cache directory. Defaults: $TMPDIR/hugo_cache_$USER/
       --cleanDestinationDir    remove files from destination not found in static directories
       --config string          config file (default is path/config.yaml|json|toml)
       --configDir string       config dir (default "config")
